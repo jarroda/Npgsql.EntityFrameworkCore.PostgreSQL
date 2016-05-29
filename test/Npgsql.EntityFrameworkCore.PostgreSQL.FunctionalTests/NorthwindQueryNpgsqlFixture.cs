@@ -24,6 +24,8 @@ namespace Npgsql.EntityFrameworkCore.PostgreSQL.FunctionalTests
 
         public NorthwindQueryNpgsqlFixture()
         {
+            FileLoggingProvider.Go();
+
             _serviceProvider
                 = new ServiceCollection()
                     .AddEntityFrameworkNpgsql()

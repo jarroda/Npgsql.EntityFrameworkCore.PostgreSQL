@@ -136,10 +136,16 @@ namespace Npgsql.EntityFrameworkCore.PostgreSQL.FunctionalTests.Utilities
                             in
                             new Regex("^GO", RegexOptions.IgnoreCase | RegexOptions.Multiline,
                                 TimeSpan.FromMilliseconds(1000.0))
-                                .Split(script))
-                        {
+                                .Split(script)) {
+                            command.CommandTimeout = 5;
                             command.CommandText = batch;
-                            command.ExecuteNonQuery();
+                            try {
+                                command.ExecuteNonQuery();
+                            }
+                            catch (NpgsqlException e) when (e.InnerException is IOException) {
+                                Console.WriteLine("FOO");
+                                throw;
+                            }
                         }
                     }
                 }
